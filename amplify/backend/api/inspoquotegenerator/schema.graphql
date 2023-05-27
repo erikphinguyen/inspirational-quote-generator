@@ -18,7 +18,7 @@ type QuoteAppData
   ]) {
   id: ID!
   queryName: String!
-    @index(name: "QuotesQueryName", queryField: "quoteQueryName")
+    @index(name: "QuotesQueryName", queryField: "quotesQueryName")
   quotesGenerated: Int!
   createdAt: String!
   updatedAt: String!

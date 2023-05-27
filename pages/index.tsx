@@ -10,11 +10,39 @@ import { BackgroundImage1, BackgroundImage2, FooterCon, FooterLink, RedSpan, Gra
 // Assets
 import Clouds1 from '../assets/cloud-and-thunder.png'
 import Clouds2 from '../assets/cloudy-weather.png'
+import { API } from 'aws-amplify'
+import { quotesQueryName } from '../src/graphql/queries'
+
+// Interface for our DynamoDB object
+interface UpdateQuoteInfoData {
+  id: string;
+  queryName: string;
+  quotesGenerated: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Type guard for our fetch function
 
 
 export default function Home() {
 
   const [numberOfQuotes, setNumberOfQuotes] = useState<Number | null>(0);
+
+  // Function to fetch our DynamoDB object (qutoes generated)
+  const updateQuoteInfo = async () => {
+    try {
+      const response = await API.graphql<UpdateQuoteInfoData>({
+        query: quotesQueryName,
+        authMode: 'AWS_IAM',
+        variables: {
+          queryName: "LIVE"
+        }
+      });
+    }
+    catch (error) {
+      console.log(`error getting quote data: ${error}`);
+    }
 
   return (
     <>
@@ -43,7 +71,9 @@ export default function Home() {
             </QuoteGeneratorSubTitle>
 
             <GenerateQuoteButton>
-              <GenerateQuoteButtonText onClick={null}>
+              <GenerateQuoteButtonText
+              // onClick={null}
+              >
                 Generate Quote
               </GenerateQuoteButtonText>
             </GenerateQuoteButton>

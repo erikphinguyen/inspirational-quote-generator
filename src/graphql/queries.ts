@@ -36,15 +36,15 @@ export const listQuoteAppData = /* GraphQL */ `
     }
   }
 `;
-export const quoteQueryName = /* GraphQL */ `
-  query QuoteQueryName(
+export const quotesQueryName = /* GraphQL */ `
+  query QuotesQueryName(
     $queryName: String!
     $sortDirection: ModelSortDirection
     $filter: ModelQuoteAppDataFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    quoteQueryName(
+    quotesQueryName(
       queryName: $queryName
       sortDirection: $sortDirection
       filter: $filter
