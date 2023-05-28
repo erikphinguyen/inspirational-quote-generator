@@ -83,6 +83,19 @@ export default function Home() {
   const handleOpenGenerator = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setOpenGenerator(true);
+    setProcessingQuote(true);
+    try {
+      // Run Lambda Function
+      // setProcessingQuote(false);
+      setTimeout(() => {
+        setProcessingQuote(false);
+        setQuoteReceived('This is a test quote');
+      }, 3000);
+    }
+    catch (error) {
+      console.log('error generating quote:', error)
+      setProcessingQuote(false);
+    }
   };
 
   return (
@@ -118,10 +131,8 @@ export default function Home() {
               Looking for a splash of inspiration? Generate a quote card with a random inspirational quote provided by <FooterLink href="https://zenquotes.io/" target="_blank" rel="noopener noreferrer">ZenQuotes API</FooterLink>.
             </QuoteGeneratorSubTitle>
 
-            <GenerateQuoteButton>
-              <GenerateQuoteButtonText
-              onClick={handleOpenGenerator}
-              >
+            <GenerateQuoteButton onClick={handleOpenGenerator}>
+              <GenerateQuoteButtonText>
                 Generate Quote
               </GenerateQuoteButtonText>
             </GenerateQuoteButton>
