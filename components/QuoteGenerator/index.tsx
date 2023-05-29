@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 
 // Material UI Imports
 import { Backdrop, Fade, Modal } from '@mui/material'
-import { ModalCircularProgress, QuoteGeneratorInnerCon, QuoteGeneratorModalCon, QuoteGeneratorSubTitle, QuoteGeneratorTitle } from './QuoteGeneratorElements';
+import { ModalCircularProgress, QuoteGeneratorModalCon, QuoteGeneratorModalInnerCon, QuoteGeneratorSubTitle, QuoteGeneratorTitle } from './QuoteGeneratorElements';
 import ImageBlob from '../animations/ImageBlob';
 import { ImageBlobCon } from '../animations/AnimationElements';
 import AnimatedDownloadButton from '../animations/AnimatedDownloadButton';
 
 interface QuoteGeneratorModalProps {
-    open: boolean;
+    open: boolean,
     close: () => void;
     processingQuote: boolean;
     setProcessingQuote: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,9 +18,9 @@ interface QuoteGeneratorModalProps {
 
 const style = {
 
-}
+};
 
-function QuoteGeneratorModal({
+const QuoteGeneratorModal = ({
     open,
     close,
     processingQuote,
@@ -29,8 +29,8 @@ function QuoteGeneratorModal({
     setQuoteReceived,
 }: QuoteGeneratorModalProps) => {
 
-    const wiseDevQuote = '"If you can center a div, anything is possible."'
-    const wiseDevQuoteAuthor = "- a wise senior software engineer"
+    const wiseDevQuote = '"If you can center a div, anything is possible."';
+    const wiseDevQuoteAuthor = "- a wise senior software engineer";
 
     const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
@@ -76,7 +76,7 @@ function QuoteGeneratorModal({
                 <QuoteGeneratorModalCon sx={style}>
                     <QuoteGeneratorModalInnerCon>
                         {/* State #1: Processing request of quote + quote state is empty */}
-                        {(processingQuote && quoteReceived === null) &&
+                        {(processingQuote === true && quoteReceived === null) &&
                             <>
                                 <ModalCircularProgress
                                     size={"8rem"}
@@ -85,13 +85,13 @@ function QuoteGeneratorModal({
                                 <QuoteGeneratorTitle>
                                     Creating your quote...
                                 </QuoteGeneratorTitle>
-                                <QuoteGeneratorSubTitle style={{ marginTop: "20px" }}>
+                                <QuoteGeneratorSubTitle style={{marginTop: "20px"}}>
                                     {wiseDevQuote}
                                     <br></br>
-                                    <span style={{ fontSize: 26 }}>{wiseDevQuoteAuthor}</span>
+                                    <span style={{fontSize: 26}}>{wiseDevQuoteAuthor}</span>
                                 </QuoteGeneratorSubTitle>
                             </>
-                        }
+                         }
 
                         {/* State #2: Quote state fulfilled */}
                         {quoteReceived !== null &&
@@ -99,7 +99,7 @@ function QuoteGeneratorModal({
                                 <QuoteGeneratorTitle>
                                     Download your quote!
                                 </QuoteGeneratorTitle>
-                                <QuoteGeneratorSubTitle style={{ marginTop: "20px" }}>
+                                <QuoteGeneratorSubTitle style={{marginTop: "20px"}}>
                                     See a preview:
                                 </QuoteGeneratorSubTitle>
                                 <ImageBlobCon>
@@ -117,6 +117,7 @@ function QuoteGeneratorModal({
 
                     </QuoteGeneratorModalInnerCon>
                 </QuoteGeneratorModalCon>
+
             </Fade>
 
         </Modal>
