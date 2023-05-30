@@ -123,7 +123,7 @@ exports.handler = async (event) => {
                </text>
                 </g>
               <text x="${width / 2}" y="${height - 10
-            }" class="footerStyles">Developed by @BrianHHough | Quotes from ZenQuotes.io</text>
+            }" class="footerStyles">Developed by Erik Nguyen | Quotes from ZenQuotes.io</text>
           </svg>
         `;
 
