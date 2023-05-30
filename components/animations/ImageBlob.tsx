@@ -6,7 +6,9 @@ interface ImageBlobProps {
   blobUrl: string | null;
 }
 
-const ImageBlob = ({ quoteReceived, blobUrl }: ImageBlobProps) => {
+const ImageBlob = ({ quoteReceived,
+  // blobUrl
+ }: ImageBlobProps) => {
 
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
