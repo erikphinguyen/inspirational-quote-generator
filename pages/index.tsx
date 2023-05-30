@@ -5,17 +5,28 @@ import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
 
 // Components
-import { BackgroundImage1, BackgroundImage2, FooterCon, FooterLink, RedSpan, GradientBackgroundCon, QuoteGeneratorCon, QuoteGeneratorInnerCon, QuoteGeneratorTitle, QuoteGeneratorSubTitle, GenerateQuoteButton, GenerateQuoteButtonText } from '@/components/QuoteGenerator/QuoteGeneratorElements'
-import QuoteGeneratorModal from '@/components/QuoteGenerator';
+import { BackgroundImage1, BackgroundImage2, FooterCon, FooterLink, GenerateQuoteButton, GenerateQuoteButtonText, GradientBackgroundCon, QuoteGeneratorCon, QuoteGeneratorInnerCon, QuoteGeneratorSubTitle, QuoteGeneratorTitle, RedSpan } from '@/components/QuoteGenerator/QuoteGeneratorElements'
+import QuoteGeneratorModal from '@/components/QuoteGenerator'
 
 // Assets
 import Clouds1 from '../assets/cloud-and-thunder.png'
 import Clouds2 from '../assets/cloudy-weather.png'
 import { API } from 'aws-amplify'
-import { quotesQueryName } from '../src/graphql/queries'
+import { generateAQuote, quotesQueryName } from '@/src/graphql/queries'
 import { GraphQLResult } from '@aws-amplify/api-graphql'
 
-// Interface for our DynamoDB object
+
+// interface for our appsync <> lambda JSON response
+interface GenerateAQuoteData {
+  generateAQuote: {
+    statusCode: number;
+    headers: { [key: string]: string };
+    body: string;
+  }
+}
+
+
+// interface for our DynamoDB object
 interface UpdateQuoteInfoData {
   id: string;
   queryName: string;
@@ -86,11 +97,34 @@ export default function Home() {
     setProcessingQuote(true);
     try {
       // Run Lambda Function
-      // setProcessingQuote(false);
-      setTimeout(() => {
-        setProcessingQuote(false);
-        setQuoteReceived('This is a test quote');
-      }, 3000);
+      const runFunction = "runFunction";
+      const runFunctionStringified = JSON.stringify(runFunction);
+      const response = await API.graphql<GenerateAQuoteData>({
+        query: generateAQuote,
+        authMode: 'AWS_IAM',
+        variables: {
+          input: runFunctionStringified
+        },
+      });
+      const responseStringified = JSON.stringify(response);
+      const responseReStringified = JSON.stringify(responseStringified);
+      const bodyIndex = responseReStringified.indexOf('body=') + 5;
+      const bodyAndBase64 = responseReStringified.substring(bodyIndex);
+      const bodyArray = bodyAndBase64.split(',');
+      const body = bodyArray[0];
+      console.log('body', body)
+      setQuoteReceived(body);
+
+      // End State:
+      setProcessingQuote(false);
+
+      // Fetch if any new quotes were generated from counter
+
+
+      // setTimeout(() => {
+      //   setProcessingQuote(false);
+      //   setQuoteReceived('This is a test quote');
+      // }, 3000);
     }
     catch (error) {
       console.log('error generating quote:', error)
