@@ -35,45 +35,47 @@ interface UpdateQuoteInfoData {
   updatedAt: string;
 }
 
-// Type guard for our fetch function
+// type guard for our fetch function
 function isGraphQLResultForquotesQueryName(response: any): response is GraphQLResult<{
   quotesQueryName: {
-    items: [UpdateQuoteInfoData]
-  }
+    items: [UpdateQuoteInfoData];
+  };
 }> {
   return response.data && response.data.quotesQueryName && response.data.quotesQueryName.items;
 }
 
-export default function Home() {
 
+
+export default function Home() {
   const [numberOfQuotes, setNumberOfQuotes] = useState<Number | null>(0);
-  const [openGenerator, setOpenGenerator] = useState<boolean>(false);
-  const [processingQuote, setProcessingQuote] = useState<boolean>(false);
+  const [openGenerator, setOpenGenerator] = useState(false);
+  const [processingQuote, setProcessingQuote] = useState(false);
   const [quoteReceived, setQuoteReceived] = useState<String | null>(null);
 
-  // Function to fetch our DynamoDB object (qutoes generated)
+  // Function to fetch our DynamoDB object (quotes generated)
   const updateQuoteInfo = async () => {
     try {
       const response = await API.graphql<UpdateQuoteInfoData>({
         query: quotesQueryName,
-        authMode: 'AWS_IAM',
+        authMode: "AWS_IAM",
         variables: {
-          queryName: "LIVE"
-        }
-      });
-      // console.log('response', response)
-      // setNumberOfQuotes(response.data.quotes.items[0].quotesGenerated);\
+          queryName: "LIVE",
+        },
+      })
+      // console.log('response', response);
+      // setNumberOfQuotes();
 
       // Create type guards
       if (!isGraphQLResultForquotesQueryName(response)) {
-        throw new Error('Unexpected response from API.graphql')
+        throw new Error('Unexpected response from API.graphql');
       }
 
       if (!response.data) {
-        throw new Error('Response data is undefined')
+        throw new Error('Response data is undefined');
       }
 
       const receivedNumberOfQuotes = response.data.quotesQueryName.items[0].quotesGenerated;
+      console.log('receivedNumberOfQuotes', receivedNumberOfQuotes);
       setNumberOfQuotes(receivedNumberOfQuotes);
 
     }
@@ -112,7 +114,7 @@ export default function Home() {
       const bodyAndBase64 = responseReStringified.substring(bodyIndex);
       const bodyArray = bodyAndBase64.split(',');
       const body = bodyArray[0];
-      console.log('body', body)
+      // console.log('body', body)
       setQuoteReceived(body);
 
       // End State:
@@ -187,7 +189,7 @@ export default function Home() {
 
         <FooterCon>
           <>
-            Quotes Generated: {numberOfQuotes}
+            {/* Quotes Generated: {numberOfQuotes} */}
             <br />
             Developed with <RedSpan>❤️</RedSpan> by <FooterLink href="https://www.linkedin.com/in/erikphinguyen/" target="_blank" rel="noopener noreferrer">Erik Nguyen
             </FooterLink>
